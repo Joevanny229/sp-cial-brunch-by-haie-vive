@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration – Brunch Rotaract</title>
+  <script src="theme.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo">ROTARACT</div>
+    <p>Administration – Brunch du 1er anniversaire</p>
+    <button type="button" id="theme-toggle" class="theme-toggle"
+      aria-label="Changer de thème">🌙</button>
+  </header>
+
+  <main class="admin-container">
+
+    <!-- CONNEXION -->
+    <section id="login-section" class="admin-card">
+      <h1>Espace administrateur</h1>
+      <p class="description">
+        Connecte-toi pour gérer les invitations et suivre le tirage.
+      </p>
+
+      <form id="login-form">
+        <label for="admin-email">Adresse e-mail</label>
+        <input type="email" id="admin-email" required
+          autocomplete="username" placeholder="Ton adresse e-mail">
+
+        <label for="admin-password">Mot de passe</label>
+        <input type="password" id="admin-password" required
+          autocomplete="current-password" placeholder="Ton mot de passe">
+
+        <button type="submit" id="login-button">Se connecter</button>
+      </form>
+
+      <p id="login-message" class="admin-message" aria-live="polite"></p>
+    </section>
+
+    <!-- TABLEAU DE BORD -->
+    <section id="dashboard-section" hidden>
+
+      <div class="admin-heading">
+        <div>
+          <p class="eyebrow">TABLEAU DE BORD</p>
+          <h1>Gestion du brunch</h1>
+          <p id="event-name" class="description"></p>
+        </div>
+
+        <button type="button" id="logout-button" class="secondary-button">
+          Déconnexion
+        </button>
+      </div>
+
+      <p id="dashboard-message" class="admin-message" aria-live="polite"></p>
+
+      <!-- OUVERTURE DU TIRAGE -->
+      <section class="admin-card">
+        <div class="section-heading">
+          <div>
+            <h2>État du tirage</h2>
+            <p class="description">
+              Tant que le tirage est fermé, personne ne peut tirer sa
+              couleur, même avec un code valide.
+            </p>
+          </div>
+          <span id="draw-status" class="status-pill">—</span>
+        </div>
+
+        <button type="button" id="toggle-draw-button">
+          Ouvrir le tirage
+        </button>
+
+        <p id="draw-message" class="admin-message" aria-live="polite"></p>
+      </section>
+
+      <!-- VUE D'ENSEMBLE -->
+      <section class="admin-card">
+        <div class="section-heading">
+          <h2>Vue d'ensemble</h2>
+          <button type="button" id="refresh-button" class="secondary-button">
+            Actualiser
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span>Codes générés</span>
+            <strong id="invited-count">0 / 19</strong>
+          </div>
+          <div class="stat-box">
+            <span>Tirages effectués</span>
+            <strong id="drawn-count">0</strong>
+          </div>
+          <div class="stat-box">
+            <span>Restants à tirer</span>
+            <strong id="pending-count">0</strong>
+          </div>
+        </div>
+
+        <h3 class="subheading">Répartition des couleurs</h3>
+        <div id="quota-container" class="quota-grid"></div>
+      </section>
+
+      <!-- CODES D'INVITATION -->
+      <section class="admin-card">
+        <h2>Codes d'invitation</h2>
+
+        <p class="description">
+          Génère un code personnel pour chaque personne qui n'en a pas
+          encore. Chaque code ne peut servir qu'à un seul tirage.
+        </p>
+
+        <p class="description">
+          Attention : les codes en clair ne sont affichés qu'une seule
+          fois. Télécharge le fichier CSV avant de fermer ou d'actualiser
+          cette page, puis envoie à chacun son lien en privé.
+        </p>
+
+        <button type="button" id="generate-invitations-button">
+          Générer les codes manquants
+        </button>
+
+        <p id="invitation-message" class="admin-message"
+          aria-live="polite"></p>
+
+        <div id="invitations-section" hidden>
+          <h3 class="subheading">Invitations générées</h3>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nom et prénoms</th>
+                  <th>Catégorie</th>
+                  <th>Lien personnel</th>
+                </tr>
+              </thead>
+              <tbody id="invitations-table"></tbody>
+            </table>
+          </div>
+
+          <div class="button-row">
+            <button type="button" id="download-invitations-button">
+              Télécharger les invitations (CSV)
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- PERSONNES AUTORISÉES -->
+      <section class="admin-card">
+        <div class="section-heading">
+          <div>
+            <h2>Personnes autorisées</h2>
+            <p class="description">
+              Les 19 personnes autorisées à participer, leur statut et
+              leur couleur une fois le tirage effectué.
+            </p>
+          </div>
+
+          <button type="button" id="export-results-button"
+            class="secondary-button">
+            Exporter les résultats (CSV)
+          </button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span>Total autorisé</span>
+            <strong id="authorized-total">19</strong>
+          </div>
+          <div class="stat-box">
+            <span>Membres</span>
+            <strong id="authorized-members-count">15</strong>
+          </div>
+          <div class="stat-box">
+            <span>Postulants</span>
+            <strong id="authorized-applicants-count">4</strong>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Nom et prénoms</th>
+                <th>Catégorie</th>
+                <th>Statut</th>
+                <th>Couleur</th>
+                <th>Tirage</th>
+                <th>Code</th>
+              </tr>
+            </thead>
+            <tbody id="authorized-participants-table">
+              <tr><td colspan="6">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p id="authorized-message" class="admin-message"
+          aria-live="polite"></p>
+      </section>
+
+      <!-- TENTATIVES REFUSÉES -->
+      <section class="admin-card">
+        <h2>Tentatives refusées</h2>
+
+        <p class="description">
+          Les 100 dernières tentatives enregistrées par le système.
+        </p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Personne</th>
+                <th>Motif</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="attempts-table">
+              <tr><td colspan="3">Chargement...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <footer>
+    Club Rotaract de Cotonou Haie-Vive · 2026
+  </footer>
+
+  <script type="module" src="./admin.js"></script>
+</body>
+</html>
